@@ -4,10 +4,14 @@ const cors = require('cors');
 const app = express()
 
 require('dotenv').config()
-const port = 3000 || process.env.PORT;
+const port = process.env.PORT || 5000;
 
 app.use(express.json())
-app.use(cors())
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://innomart-169df.web.app", "https://innomart-169df.firebaseapp.com"],
+  })
+);
 
 // mongodb code
 
@@ -26,7 +30,7 @@ const db = client.db("innoMartDB")
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const productCollection = db.collection("products");
 
@@ -63,8 +67,8 @@ async function run() {
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
