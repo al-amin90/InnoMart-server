@@ -37,13 +37,18 @@ async function run() {
     })
 
     app.get('/products', async (req, res) => {
-        const{productName} = req.query;
-        const query = {};
+        const{productName, price} = req.query;
+        let query = {};
+        let options= {}
+        console.log(price);
 
         if(productName){
             query.productName = { $regex: productName, $options: "i"}
         }
-        const result = await productCollection.find(query).toArray()
+        if(price){
+            options = { sort: {price: price === "Low to High" ? 1 : -1}}
+        }
+        const result = await productCollection.find(query, options).toArray()
         res.send(result)
     })
 
