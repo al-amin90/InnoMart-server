@@ -14,7 +14,6 @@ app.use(
 );
 
 // mongodb code
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.hjmc0vt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -40,8 +39,8 @@ async function run() {
         const newProduct = req.query.newProduct === "true";
         let query = {};
         let options= {}
-        const size = parseInt(req.query.size);
         const page = parseInt(req.query.page) - 1;
+        const size = parseInt(req.query.size);
 
         if(productName){
             query.productName = { $regex: productName, $options: "i"}
@@ -63,8 +62,6 @@ async function run() {
        
         res.send({result, count})
     })
-
-
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
