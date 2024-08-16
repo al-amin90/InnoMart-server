@@ -41,7 +41,7 @@ async function run() {
         const newProduct = req.query.newProduct === "true";
         let query = {};
         let options= {}
-        console.log(category);
+        console.log(brandName);
 
         if(productName){
             query.productName = { $regex: productName, $options: "i"}
@@ -56,7 +56,7 @@ async function run() {
             query.category = { $regex: category, $options: "i"}
         }
         if(brandName){
-            query.category = { $regex: category, $options: "i"}
+            query.brandName = { $regex: brandName, $options: "i"}
         }
         const result = await productCollection.find(query, options).toArray()
         res.send(result)
