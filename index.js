@@ -30,18 +30,19 @@ async function run() {
 
     const productCollection = db.collection("products");
 
-    // get all product
-    app.get('/allProducts', async(req, res) => {
-        const result = await productCollection.find().toArray()
-        res.send(result)
-    })
+    app.get("/productsCount", async (req, res) => {
+      const count = await productCollection.countDocuments();
+      res.send({ count });
+    });
 
+    // get all product
     app.get('/products', async (req, res) => {
         const{productName, price, category,brandName} = req.query;
         const newProduct = req.query.newProduct === "true";
         let query = {};
         let options= {}
-        console.log(brandName);
+        const size = parseInt(req.query.size);
+        const page = parseInt(req.query.page) - 1;
 
         if(productName){
             query.productName = { $regex: productName, $options: "i"}
@@ -58,7 +59,7 @@ async function run() {
         if(brandName){
             query.brandName = { $regex: brandName, $options: "i"}
         }
-        const result = await productCollection.find(query, options).toArray()
+        const result = await productCollection.find(query, options).skip(page * size).limit(size).toArray()
         res.send(result)
     })
 
