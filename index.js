@@ -30,11 +30,6 @@ async function run() {
 
     const productCollection = db.collection("products");
 
-    app.get("/productsCount", async (req, res) => {
-      const count = await productCollection.countDocuments();
-      res.send({ count });
-    });
-
     // get all product
     app.get('/products', async (req, res) => {
         const{productName, price, category,brandName} = req.query;
@@ -60,7 +55,9 @@ async function run() {
             query.brandName = { $regex: brandName, $options: "i"}
         }
         const result = await productCollection.find(query, options).skip(page * size).limit(size).toArray()
-        res.send(result)
+        const count = await productCollection.find(query, options).toArray();
+       
+        res.send({result, count})
     })
 
 
